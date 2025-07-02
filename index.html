@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Story Mode - Max and the Magic Box</title>
+  <title>Story Mode - Julie and the Magic Box</title>
   <style>
     body {
       font-family: 'Avenir', sans-serif;
@@ -58,28 +58,29 @@
   </div>
 
   <div id="stage2" class="hidden">
-    <h1>Max and the Magic Box</h1>
+    <h1>Julie and the Magic Box</h1>
     <div id="stage2Content"></div>
     <div class="nav-buttons">
+      <button onclick="prevParagraph()">⬅</button>
       <button onclick="goHome()">🏠</button>
+      <button onclick="nextParagraph()">➡</button>
     </div>
   </div>
 
   <script>
     const stage1Phrases = [
-      ['M.png', 'short-a.png', 'X.png', 'had', 'a', 'B.png', 'short-i.png', 'G.png', 'B.png', 'short-o.png', 'X.png'],
-      ['He', 'liked', 'H.png', 'short-i.png', 'S.png', 'B.png', 'short-o.png', 'X.png', 'a', 'lot'],
-      ['I.png', 'short-i.png', 'T.png', 'is', 'my', 'fun', 'B.png', 'short-o.png', 'X.png'],
-      // Add more phrases here...
+      ['J.png', 'Short-u.png', 'L.png', 'Short-i.png', 'E.png', 'had', 'a', 'B.png', 'Short-i.png', 'G.png', 'B.png', 'Short-o.png', 'X.png'],
+      ['She', 'liked', 'H.png', 'Short-e.png', 'R.png', 'B.png', 'Short-o.png', 'X.png', 'a', 'lot'],
+      ['I.png', 'Short-i.png', 'T.png', 'is', 'my', 'fun', 'B.png', 'Short-o.png', 'X.png'],
     ];
 
     const stage2Paragraphs = [
-      ` <span class="target short-a">MAX</span> had a <span class="target short-i">BIG</span> <span class="target short-o">BOX</span>. He liked <span class="target short-i">HIS</span> <span class="target short-o">BOX</span> a lot. <span class="target short-i">IT</span> is my fun <span class="target short-o">BOX</span>," he said.`,
-      `One day, <span class="target short-a">MAX</span> put the <span class="target short-o">BOX</span> in a <span class="target short-e">DEN</span>. He said, "This is the best <span class="target short-o">SPOT</span>." What was in the <span class="target short-o">BOX</span>? A <span class="target short-i">WIG</span>, a <span class="target magic-e">KITE</span>, and a <span class="target magic-e">BONE</span>!`,
-      // Add more paragraphs here...
+      `<span class="target short-u">JULIE</span> had a <span class="target short-i">BIG</span> <span class="target short-o">BOX</span>. She liked <span class="target short-e">HER</span> <span class="target short-o">BOX</span> a lot. <span class="target short-i">IT</span> is my fun <span class="target short-o">BOX</span>,” she said.`,
+      `One day, <span class="target short-u">JULIE</span> put the <span class="target short-o">BOX</span> in a <span class="target short-e">DEN</span>. She said, “This is the best <span class="target short-o">SPOT</span>.” What was in the <span class="target short-o">BOX</span>? A <span class="target short-i">WIG</span>, a <span class="target magic-e">KITE</span>, and a <span class="target magic-e">BONE</span>!`
     ];
 
     let currentPhrase = 0;
+    let currentParagraph = 0;
 
     function renderPhrase() {
       const container = document.getElementById('stage1Content');
@@ -100,6 +101,11 @@
       });
     }
 
+    function renderParagraph() {
+      const container = document.getElementById('stage2Content');
+      container.innerHTML = stage2Paragraphs[currentParagraph];
+    }
+
     function nextPhrase() {
       if (currentPhrase < stage1Phrases.length - 1) {
         currentPhrase++;
@@ -111,6 +117,20 @@
       if (currentPhrase > 0) {
         currentPhrase--;
         renderPhrase();
+      }
+    }
+
+    function nextParagraph() {
+      if (currentParagraph < stage2Paragraphs.length - 1) {
+        currentParagraph++;
+        renderParagraph();
+      }
+    }
+
+    function prevParagraph() {
+      if (currentParagraph > 0) {
+        currentParagraph--;
+        renderParagraph();
       }
     }
 
@@ -128,7 +148,8 @@
         renderPhrase();
       } else if (stage === 2) {
         document.getElementById('stage2').classList.remove('hidden');
-        document.getElementById('stage2Content').innerHTML = stage2Paragraphs.join('<br><br>');
+        currentParagraph = 0;
+        renderParagraph();
       }
     }
   </script>
