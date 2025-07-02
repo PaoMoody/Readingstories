@@ -11,14 +11,23 @@
       padding: 40px;
       line-height: 1.6;
       font-size: 20px;
+      text-align: center;
     }
-    .helper {
-      color: #333;
-      font-weight: normal;
+    .button-container {
+      margin-bottom: 40px;
     }
-    .target {
-      font-weight: bold;
-      text-transform: uppercase;
+    button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      background-color: #ffc764;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #e47e00;
+      color: white;
     }
     .short-a { color: #ff6666; }
     .short-e { color: #ff9966; }
@@ -27,90 +36,101 @@
     .short-u { color: #66ff99; }
     .magic-e { color: #cc99ff; }
     .digraph-sh, .digraph-ch { color: #ff66cc; }
-    .section {
-      margin-bottom: 20px;
-    }
+    .target { font-weight: bold; text-transform: uppercase; }
+    .hidden { display: none; }
+    .nav-buttons { margin-top: 20px; }
   </style>
 </head>
 <body>
-  <h1>Max and the Magic Box</h1>
-
-  <div class="section">
-    <span class="target short-a">MAX</span> <span class="helper">had a</span> <span class="target short-i">BIG</span> <span class="target short-o">BOX</span>.<br>
-    <span class="helper">He liked</span> <span class="target short-i">HIS</span> <span class="target short-o">BOX</span> <span class="helper">a lot.</span><br>
-    <span class="target short-i">IT</span> <span class="helper">is my fun</span> <span class="target short-o">BOX</span>,” <span class="helper">he said.</span>
+  <div class="button-container" id="stageSelect">
+    <h1>Select Your Stage</h1>
+    <button onclick="startStage(1)">Stage 1: Character Words</button>
+    <button onclick="startStage(2)">Stage 2: Colored Text</button>
   </div>
 
-  <div class="section">
-    <span class="helper">One day,</span> <span class="target short-a">MAX</span> <span class="helper">put the</span> <span class="target short-o">BOX</span> <span class="helper">in a</span> <span class="target short-e">DEN</span>.<br>
-    <span class="helper">He said, "This is the best</span> <span class="target short-o">SPOT</span>.”<br>
-    <span class="helper">What was in the</span> <span class="target short-o">BOX</span>?<br>
-    <span class="helper">A</span> <span class="target short-i">WIG</span>, a <span class="target magic-e">KITE</span>, and a <span class="target magic-e">BONE</span>!
+  <div id="stage1" class="hidden">
+    <div id="stage1Content"></div>
+    <div class="nav-buttons">
+      <button onclick="prevPhrase()">⬅</button>
+      <button onclick="goHome()">🏠</button>
+      <button onclick="nextPhrase()">➡</button>
+    </div>
   </div>
 
-  <div class="section">
-    <span class="target short-a">MAX</span> <span class="helper">got a</span> <span class="target short-a">MAP</span>.<br>
-    <span class="helper">The</span> <span class="target short-a">MAP</span> <span class="helper">had a red</span> <span class="target short-o">DOT</span>.<br>
-    <span class="helper">"What is at the red</span> <span class="target short-o">DOT</span>?" <span class="target short-a">MAX</span> <span class="helper">said.</span><br>
-    <span class="helper">"I must go see."</span>
+  <div id="stage2" class="hidden">
+    <h1>Max and the Magic Box</h1>
+    <div id="stage2Content"></div>
+    <div class="nav-buttons">
+      <button onclick="goHome()">🏠</button>
+    </div>
   </div>
 
-  <div class="section">
-    <span class="helper">He got his</span> <span class="target short-a">CAP</span>.<br>
-    <span class="helper">He got a</span> <span class="target short-u">CUP</span>.<br>
-    <span class="helper">Then he got on his</span> <span class="target magic-e">BIKE</span>.<br>
-    <span class="helper">He had to</span> <span class="target short-o">HOP</span>, <span class="target short-o">JOG</span>, and <span class="target short-u">RUN</span>.<br>
-    <span class="helper">"That</span> <span class="target short-o">DOT</span> <span class="helper">is far!" said</span> <span class="target short-a">MAX</span>.
-  </div>
+  <script>
+    const stage1Phrases = [
+      ['M.png', 'short-a.png', 'X.png', 'had', 'a', 'B.png', 'short-i.png', 'G.png', 'B.png', 'short-o.png', 'X.png'],
+      ['He', 'liked', 'H.png', 'short-i.png', 'S.png', 'B.png', 'short-o.png', 'X.png', 'a', 'lot'],
+      ['I.png', 'short-i.png', 'T.png', 'is', 'my', 'fun', 'B.png', 'short-o.png', 'X.png'],
+      // Add more phrases here...
+    ];
 
-  <div class="section">
-    <span class="helper">On the way,</span> <span class="target short-a">MAX</span> <span class="helper">met a</span> <span class="target short-i">PIG</span>.<br>
-    <span class="helper">"Do you like fun?"</span> <span class="target short-a">MAX</span> <span class="helper">said.</span><br>
-    <span class="helper">"Yes!" said the</span> <span class="target short-i">PIG</span>.<br>
-    <span class="helper">"Come with me," said</span> <span class="target short-a">MAX</span>.
-  </div>
+    const stage2Paragraphs = [
+      ` <span class="target short-a">MAX</span> had a <span class="target short-i">BIG</span> <span class="target short-o">BOX</span>. He liked <span class="target short-i">HIS</span> <span class="target short-o">BOX</span> a lot. <span class="target short-i">IT</span> is my fun <span class="target short-o">BOX</span>," he said.`,
+      `One day, <span class="target short-a">MAX</span> put the <span class="target short-o">BOX</span> in a <span class="target short-e">DEN</span>. He said, "This is the best <span class="target short-o">SPOT</span>." What was in the <span class="target short-o">BOX</span>? A <span class="target short-i">WIG</span>, a <span class="target magic-e">KITE</span>, and a <span class="target magic-e">BONE</span>!`,
+      // Add more paragraphs here...
+    ];
 
-  <div class="section">
-    <span class="helper">Then they met a</span> <span class="target short-u">BUG</span>.<br>
-    <span class="helper">The</span> <span class="target short-u">BUG</span> <span class="helper">had a</span> <span class="target short-i">BIG</span> <span class="target short-a">NAP</span>.<br>
-    <span class="helper">"Do you like fun too?" said</span> <span class="target short-a">MAX</span>.<br>
-    <span class="helper">The</span> <span class="target short-u">BUG</span> <span class="helper">said, "Yes! Let's go!"</span>
-  </div>
+    let currentPhrase = 0;
 
-  <div class="section">
-    <span class="helper">They got to the red</span> <span class="target short-o">DOT</span>.<br>
-    <span class="helper">The</span> <span class="target short-o">BOX</span> <span class="helper">was on a</span> <span class="target short-o">ROCK</span>!<br>
-    <span class="helper">"Oh wow!" said the</span> <span class="target short-i">PIG</span>.<br>
-    <span class="helper">"What is in it?" said the</span> <span class="target short-u">BUG</span>.
-  </div>
+    function renderPhrase() {
+      const container = document.getElementById('stage1Content');
+      container.innerHTML = '';
+      stage1Phrases[currentPhrase].forEach(token => {
+        const span = document.createElement('span');
+        if (token.endsWith('.png')) {
+          const img = document.createElement('img');
+          img.src = token;
+          img.alt = token;
+          img.style.height = '60px';
+          img.style.margin = '5px';
+          container.appendChild(img);
+        } else {
+          span.textContent = token + ' ';
+          container.appendChild(span);
+        }
+      });
+    }
 
-  <div class="section">
-    <span class="target short-a">MAX</span> <span class="helper">said, "A</span> <span class="target magic-e">KITE</span>, a <span class="target short-i">WIG</span>, and a <span class="target magic-e">BONE</span>!"
-  </div>
+    function nextPhrase() {
+      if (currentPhrase < stage1Phrases.length - 1) {
+        currentPhrase++;
+        renderPhrase();
+      }
+    }
 
-  <div class="section">
-    <span class="helper">The</span> <span class="target short-u">BUG</span> <span class="helper">put on the</span> <span class="target short-i">WIG</span>.<br>
-    <span class="helper">The</span> <span class="target short-i">PIG</span> <span class="helper">got the</span> <span class="target magic-e">KITE</span>.<br>
-    <span class="target short-a">MAX</span> <span class="helper">got the</span> <span class="target magic-e">BONE</span>.
-  </div>
+    function prevPhrase() {
+      if (currentPhrase > 0) {
+        currentPhrase--;
+        renderPhrase();
+      }
+    }
 
-  <div class="section">
-    <span class="helper">They</span> <span class="target short-u">RAN</span>, <span class="target short-a">SAT</span>, <span class="helper">and had fun in the</span> <span class="target short-u">SUN</span>.<br>
-    <span class="helper">"It is the best day," said</span> <span class="target short-a">MAX</span>.
-  </div>
+    function goHome() {
+      document.getElementById('stage1').classList.add('hidden');
+      document.getElementById('stage2').classList.add('hidden');
+      document.getElementById('stageSelect').classList.remove('hidden');
+    }
 
-  <div class="section">
-    <span class="target short-u">SUN</span> <span class="helper">went down.</span><br>
-    <span class="helper">"It is time to go," said</span> <span class="target short-a">MAX</span>.<br>
-    <span class="helper">He put the</span> <span class="target short-o">BOX</span> <span class="helper">in a</span> <span class="target magic-e">CAVE</span>.<br>
-    <span class="helper">"Let's go back soon," he said.</span>
-  </div>
-
-  <div class="section">
-    <span class="helper">They all went</span> <span class="target short-o">HOME</span>.<br>
-    <span class="helper">It was a very good day.</span><br>
-    <strong>The end.</strong>
-  </div>
-
+    function startStage(stage) {
+      document.getElementById('stageSelect').classList.add('hidden');
+      if (stage === 1) {
+        document.getElementById('stage1').classList.remove('hidden');
+        currentPhrase = 0;
+        renderPhrase();
+      } else if (stage === 2) {
+        document.getElementById('stage2').classList.remove('hidden');
+        document.getElementById('stage2Content').innerHTML = stage2Paragraphs.join('<br><br>');
+      }
+    }
+  </script>
 </body>
 </html>
